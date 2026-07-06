@@ -6,6 +6,6 @@ public class Pessoa
 
     public List<Transacao> Transacaos {get; set;}
 
-    
+    public DateTime DataDeCriacao {get; set;}
 
 }

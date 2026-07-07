@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/types.ts","./src/useTema.ts","./src/vite-env.d.ts","./src/api/client.ts","./src/components/PessoaForm.tsx","./src/components/PessoaList.tsx","./src/components/TotaisView.tsx","./src/components/TransacaoForm.tsx","./src/components/TransacaoList.tsx"],"version":"5.9.3"}

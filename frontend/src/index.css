@@ -1,0 +1,55 @@
+:root {
+  --tinta: #1c2321;
+  --tinta-suave: #4a5450;
+  --papel: #faf9f6;
+  --papel-linha: #e7e3d8;
+  --superficie: #ffffff;
+  --receita: #2f6f4e;
+  --despesa: #a8412c;
+  --borda: #ddd7c8;
+  --foco: #1c2321;
+
+  --fonte-titulo: "Source Serif 4", Georgia, serif;
+  --fonte-corpo: "Inter", system-ui, sans-serif;
+  --fonte-numero: "IBM Plex Mono", monospace;
+}
+
+[data-tema="escuro"] {
+  --tinta: #ece7dc;
+  --tinta-suave: #a19b8c;
+  --papel: #17181a;
+  --papel-linha: #2c2d2b;
+  --superficie: #201f1d;
+  --receita: #5fae82;
+  --despesa: #e0765f;
+  --borda: #38372f;
+  --foco: #ece7dc;
+}
+
+body {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fonte-corpo);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+}

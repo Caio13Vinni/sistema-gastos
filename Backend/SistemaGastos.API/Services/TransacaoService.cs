@@ -40,7 +40,8 @@ public class TransacaoService
             Descricao = descricao,
             Valor = valor,
             Tipo = tipoPadronizado,
-            PessoaId = pessoaId
+            PessoaId = pessoaId,
+            DataDeCriacao = DateTime.Now
         };
 
         _context.Transacoes.Add(transacao);

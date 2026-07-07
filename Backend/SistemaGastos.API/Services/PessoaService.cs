@@ -26,7 +26,8 @@ public class PessoaService
         var pessoa = new Pessoa
         {
             Nome = nome,
-            Idade = idade
+            Idade = idade,
+            DataDeCriacao = DateTime.Now
         };
 
         _context.Pessoas.Add(pessoa);

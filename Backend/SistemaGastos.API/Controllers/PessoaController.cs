@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SistemaGastos.API.Models;
+using SistemaGastos.API.Dtos;
 using SistemaGastos.API.Services;
 
 namespace SistemaGastos.API.Controllers;
@@ -16,13 +16,13 @@ public class PessoaController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Pessoa>> Criar([FromBody] CriarPessoaRequest request)
+    public async Task<ActionResult<PessoaResponseDto>> Criar([FromBody] CriarPessoaRequest request)
     {
         try
         {
             var pessoa = await _service.CriarPessoa(request.Nome, request.Idade);
             // Retorna HTTP 201 
-            return CreatedAtAction(nameof(Listar), new { id = pessoa.Id }, pessoa);
+            return CreatedAtAction(nameof(Listar), new { id = pessoa.Id }, PessoaResponseDto.FromEntity(pessoa));
         }
         catch (ArgumentException ex)
         {
@@ -33,10 +33,11 @@ public class PessoaController : ControllerBase
 
     // GET 
     [HttpGet]
-    public async Task<ActionResult<List<Pessoa>>> Listar()
+    public async Task<ActionResult<List<PessoaResponseDto>>> Listar()
     {
         var pessoas = await _service.ListarPessoas();
-        return Ok(pessoas); // Retorna HTTP 200 
+        // Converte cada entidade para DTO, evitando expor ciclo Pessoa <-> Transacao
+        return Ok(pessoas.Select(PessoaResponseDto.FromEntity).ToList());
     }
 
    

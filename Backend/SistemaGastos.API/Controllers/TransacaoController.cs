@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SistemaGastos.API.Dtos;
 using SistemaGastos.API.Models;
 using SistemaGastos.API.Services;
 
@@ -16,7 +17,7 @@ public class TransacaoController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Transacao>> Criar([FromBody] CriarTransacaoRequest request)
+    public async Task<ActionResult<TransacaoResponseDto>> Criar([FromBody] CriarTransacaoRequest request)
     {
         try
         {
@@ -27,7 +28,8 @@ public class TransacaoController : ControllerBase
                 request.PessoaId
             );
 
-            return CreatedAtAction(nameof(Listar), new { id = transacao.Id }, transacao);
+            var dto = TransacaoResponseDto.FromEntity(transacao);
+            return CreatedAtAction(nameof(Listar), new { id = transacao.Id }, dto);
         }
         catch (KeyNotFoundException ex)
         {
@@ -44,19 +46,19 @@ public class TransacaoController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Transacao>>> Listar()
+    public async Task<ActionResult<List<TransacaoResponseDto>>> Listar()
     {
         var transacoes = await _service.ListarTransacoes();
-        return Ok(transacoes);
+        return Ok(transacoes.Select(TransacaoResponseDto.FromEntity).ToList());
     }
 
     [HttpGet("pessoa/{pessoaId}")]
-    public async Task<ActionResult<List<Transacao>>> ListarPorPessoa(int pessoaId)
+    public async Task<ActionResult<List<TransacaoResponseDto>>> ListarPorPessoa(int pessoaId)
     {
         try
         {
             var transacoes = await _service.ListarTransacoesPorPessoa(pessoaId);
-            return Ok(transacoes);
+            return Ok(transacoes.Select(TransacaoResponseDto.FromEntity).ToList());
         }
         catch (KeyNotFoundException ex)
         {
@@ -64,7 +66,6 @@ public class TransacaoController : ControllerBase
         }
     }
 
-    // ✅ NOVO: Deletar
     [HttpDelete("{id}")]
     public async Task<IActionResult> Deletar(int id)
     {
@@ -80,12 +81,12 @@ public class TransacaoController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<Transacao>> Atualizar(int id, [FromBody] AtualizarTransacaoRequest request)
+    public async Task<ActionResult<TransacaoResponseDto>> Atualizar(int id, [FromBody] AtualizarTransacaoRequest request)
     {
         try
         {
             var transacao = await _service.AtualizarTransacao(id, request.Descricao, request.Valor, request.Tipo);
-            return Ok(transacao);
+            return Ok(TransacaoResponseDto.FromEntity(transacao));
         }
         catch (KeyNotFoundException ex)
         {

@@ -1,5 +1,6 @@
 using SistemaGastos.API.Models;
 namespace SistemaGastos.API.Data;
+
 using Microsoft.EntityFrameworkCore;
 
 // Conexão com o banco (SQLite). Guarda pessoas e transações em um arquivo local.
@@ -24,11 +25,15 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Transacao>(entity =>
         {
             entity.HasKey(t => t.Id);
+
+            entity.HasIndex(t => t.PessoaId);
+            entity.HasIndex(t => t.DataDeCriacao);
+            entity.HasIndex(t => new { t.PessoaId, t.DataDeCriacao });
+
             entity.Property(t => t.Descricao).IsRequired().HasMaxLength(500);
             entity.Property(t => t.Valor).HasColumnType("decimal(18,2)");
-            entity.Property(t => t.Tipo).HasConversion<string>();
+            entity.Property(t => t.Tipo).HasConversion<int>();
 
-            // Ao excluir a pessoa, o banco apaga as transações dela automaticamente.
             entity.HasOne(t => t.Pessoa)
                   .WithMany(p => p.Transacoes)
                   .HasForeignKey(t => t.PessoaId)

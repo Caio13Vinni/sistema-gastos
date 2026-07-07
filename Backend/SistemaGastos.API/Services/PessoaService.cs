@@ -11,31 +11,30 @@ public class PessoaService
     {
         _context = context;
     }
-    public async Task<Pessoa> CriarPessoa(string nome, int idade)
+public async Task<Pessoa> CriarPessoa(string nome, int idade)
+{
+    if (string.IsNullOrWhiteSpace(nome))
     {
-        if (string.IsNullOrWhiteSpace(nome))
-        {
-            throw new ArgumentException("O nome é obrigatório.");
-        }
-
-        if (idade < 0)
-        {
-            throw new ArgumentException("A idade não pode ser negativa.");
-        }
-
-        var pessoa = new Pessoa
-        {
-            Nome = nome,
-            Idade = idade,
-            DataDeCriacao = DateTime.Now
-        };
-
-        _context.Pessoas.Add(pessoa);
-
-        await _context.SaveChangesAsync();
-
-        return pessoa;
+        throw new ArgumentException("O nome é obrigatório.");
     }
+
+    if (idade < 0 || idade > 150)
+    {
+        throw new ArgumentException("A idade deve estar entre 0 e 150 anos.");
+    }
+
+    var pessoa = new Pessoa
+    {
+        Nome = nome.Trim(),
+        Idade = idade,
+        DataDeCriacao = DateTime.UtcNow
+    };
+
+    _context.Pessoas.Add(pessoa);
+    await _context.SaveChangesAsync();
+
+    return pessoa;
+}
 
     public async Task<List<Pessoa>> ListarPessoas()
     {

@@ -1,15 +1,18 @@
 namespace SistemaGastos.API.Models;
 
+public enum TipoTransacao
+{
+    Receita = 1,
+    Despesa = 2
+}
+
 public class Transacao
 {
     public int Id { get; set; }
-    public String Descricao { get; set; } = string.Empty;
+    public string Descricao { get; set; } = string.Empty;
     public decimal Valor { get; set; }
-    public String Tipo {get; set;} = string.Empty;
+    public TipoTransacao Tipo { get; set; }
     public int PessoaId { get; set; }
-
-    //verificar quem fez a transacao 
-
-    public Pessoa? Pessoa {get; set;}
-    public DateTime DataDeCriacao {get; set;}
+    public Pessoa? Pessoa { get; set; }
+    public DateTime DataDeCriacao { get; set; }
 }

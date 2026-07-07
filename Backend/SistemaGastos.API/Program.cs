@@ -2,6 +2,8 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using SistemaGastos.API.Data;
 using SistemaGastos.API.Services;
+using SistemaGastos.API.Middleware;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connect
 // Registrando os Services ANTES do builder.Build()
 builder.Services.AddScoped<PessoaService>();
 builder.Services.AddScoped<TransacaoService>();
+builder.Services.AddScoped<RelatorioService>();
 
 // Permissao frontend
 const string CorsPolicyName = "PermitirFrontend";
@@ -29,11 +32,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(CorsPolicyName, policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
+               .AllowAnyHeader()
+               .AllowAnyMethod();
     });
 });
-
-// === A LINHA QUE TRANCA AS CONFIGURAÇÕES ===
 var app = builder.Build();
 
 // Cria o banco e as tabelas automaticamente na primeira execução.
@@ -42,9 +46,9 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
 }
-
 app.UseHttpsRedirection();
 app.UseCors(CorsPolicyName);
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 

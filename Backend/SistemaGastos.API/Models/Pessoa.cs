@@ -1,12 +1,10 @@
 namespace SistemaGastos.API.Models;
 
-public class Pessoa 
+public class Pessoa
 {
-    public int Id{ get; set;}
-    public String Nome { get; set; } = string.Empty;
+    public int Id { get; set; }
+    public string Nome { get; set; } = string.Empty;
     public int Idade { get; set; }
-
-    public List<Transacao> Transacoes { get; set; } = new List<Transacao>();
-    public DateTime DataDeCriacao {get; set;}
-
+    public List<Transacao> Transacoes { get; set; } = new();
+    public DateTime DataDeCriacao { get; set; }
 }
